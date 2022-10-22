@@ -2,9 +2,9 @@
   "name": "myhome-bot",
   "version": "1.0.0",
   "description": "parse myhome and send to telegram",
-  "main": "bot.js",
+  "main": "src/bot.js",
   "scripts": {
-    "start": "node bot.js",
+    "start": "node src/bot.js",
     "dev": "nodemon"
   },
   "author": "",
