@@ -4,6 +4,7 @@ const SENT_PRODUCTS = 'sent_products'
 
 class QueryStore extends Store {
     constructor() {
+        process.chdir(__dirname + '/../')
         super('query.data', { home: process.cwd() })
     }
 

@@ -5,6 +5,7 @@ const SUBSCRIBERS = 'subscribers'
 
 class BotStore extends Store {
     constructor() {
+        process.chdir(__dirname + '/../')
         super('bot.subscribers.data', { home: process.cwd() });
     }
 
