@@ -6,6 +6,10 @@ const axios = Axios.create({
     baseURL: `https://api.telegram.org/bot${token}`,
 })
 
+const sendMessage = (chat_id, text) => {
+    return axios.get('/sendMessage', { params: { chat_id, text } })
+}
+
 const makeText = (product) => {
     return `${product.m2price}$ ${product.area}m2 ${product.price}$\r\n` +
         `${product.rooms} rooms, ${product.bedrooms} bedrooms\r\n` +
@@ -17,16 +21,11 @@ const makeText = (product) => {
 const notify = (product) => {
     const text = makeText(product)
     subscribers.forEach(subscriber => {
-        return axios.get('/sendMessage', {
-            params: {
-                chat_id: subscriber,
-                text,
-            },
-        })
+        return sendMessage(subscriber, text)
             .then(({ status }) => {
                 console.log(subscriber, product.id, status)
             })
     })
 }
 
-module.exports = { notify }
+module.exports = { sendMessage, notify }

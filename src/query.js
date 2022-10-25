@@ -1,6 +1,7 @@
 const Axios = require('axios')
 const Store = require('./query.store')
-const { notify } = require('./notifier')
+const BotStore = require('./bot.store')
+const { sendMessage, notify } = require('./notifier')
 
 const axios = Axios.create({
     baseURL: 'https://www.myhome.ge/ka',
@@ -25,6 +26,7 @@ const mapFloor = (floor) => ({
 })
 
 const parse = async (page = 1) => {
+    console.log('------STARTED-------', 'page', page)
     const products = await axios.get('/s', { params: { ...filters, Page: page } }).then(({ data }) => {
         const { Data = {} } = data
         const { Prs: all = [], Cnt: cnt } = Data
@@ -38,9 +40,9 @@ const parse = async (page = 1) => {
     for (let i = 0; i < products.length; i++) {
         const product = products[i]
         if (Store.check(product.id)) {
-            return
+            console.log('------STOPPED-------', 'page', page, 'index', i)
+            return sendMessage(BotStore.root, `Stopped at page ${page} and item index ${i}`)
         }
-        console.log(product.id)
 
         notify(product)
         Store.setSentProduct(product.id)
