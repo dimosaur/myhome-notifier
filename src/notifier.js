@@ -13,7 +13,9 @@ const sendMessage = (chat_id, text) => {
 const makeText = (product) => {
     return `${product.m2price}$ ${product.area}m2 ${product.price}$\r\n` +
         `${product.rooms} rooms, ${product.bedrooms} bedrooms\r\n` +
-        `${product.date}\r\n` +
+        `name ${product.name}\r\n` +
+        `addr ${product.address}\r\n` +
+        `date ${product.date}\r\n` +
         `\r\n${product.comment}\r\n\r\n` +
         `${product.url}`
 }

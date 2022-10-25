@@ -21,10 +21,14 @@ const mapFloor = (floor) => ({
     }),
     rooms: Number(floor.rooms),
     bedrooms: Number(floor.bedrooms),
+    name: JSON.parse(floor.name_json).ka,
+    address: JSON.parse(floor.pathway_json).ka,
     comment: floor.comment,
+    isVip: Boolean(Number(floor.vip)),
     url: `https://www.myhome.ge/ka/pr/${floor.product_id}`,
 })
 
+let skippedVips = 0
 const parse = async (page = 1) => {
     console.log('------STARTED-------', 'page', page)
     const products = await axios.get('/s', { params: { ...filters, Page: page } }).then(({ data }) => {
@@ -40,8 +44,12 @@ const parse = async (page = 1) => {
     for (let i = 0; i < products.length; i++) {
         const product = products[i]
         if (Store.check(product.id)) {
-            console.log('------STOPPED-------', 'page', page, 'index', i)
-            return sendMessage(BotStore.root, `Stopped at page ${page} and item index ${i}`)
+            if (product.isVip) {
+                skippedVips++
+                continue
+            }
+            console.log('------STOPPED-------', 'page', page, 'index', i, 'skippedVips', skippedVips)
+            return sendMessage(BotStore.root, `Stopped at page ${page} and item index ${i} skipped ${skippedVips}`)
         }
 
         notify(product)
